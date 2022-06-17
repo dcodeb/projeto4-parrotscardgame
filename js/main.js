@@ -1,4 +1,31 @@
 let totalCards = 0;
+let gameDeck = ['bobrossparrot', 'explodyparrot', 'fiestaparrot', 'metalparrot', 'revertitparrot', 'tripletsparrot', 'unicornparrot'];
+
+function createCards() {
+    const templateCard = `
+    <div class="card">
+        <div class="front face">
+            <img src="assets/front.png" alt="carta">
+        </div>
+        <div class="back face">
+            VERSO
+        </div>
+    </div>
+    `;
+
+    for (let i = 0; i < totalCards; i++) {
+        document.querySelector('.container-cards').innerHTML += `
+        <div class="card">
+            <div class="front face">
+                <img src="assets/front.png" alt="carta">
+            </div>
+            <div class="back face">
+                ${gameDeck[i]}
+            </div>
+        </div>
+        `;
+    }
+}
 
 function startGame() {
 
@@ -11,15 +38,8 @@ function startGame() {
         }
     }
 
-    const templateCard = `
-    <div class="card">
-        <img src="assets/front.png" alt="carta">
-    </div>
-    `;
+    createCards();
 
-    for (let i = 0; i < totalCards; i++) {
-        document.querySelector('.container-cards').innerHTML += templateCard;
-    }
 
 }
 
