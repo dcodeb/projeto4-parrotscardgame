@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #EEF9BF;
+}
+
+.title-game {
+    margin: 60px auto 60px auto;
+    width: fit-content;
+}
+
+.title-game h1 {
+    font-size: 56px;
+    color: #75B79E;
+    font-weight: bold;
+}
+
+.container-cards {
+    margin: 0 122px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    width: 117px;
+    height: 146px;
+    background-color: #A7E9AF;
+    border: 1px solid #99CEA8;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card img {
+    width: 100px;
+}
