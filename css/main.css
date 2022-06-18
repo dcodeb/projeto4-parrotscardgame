@@ -28,7 +28,7 @@ body {
     position:  relative;
 }
 
-.front img {
+.card img {
     width: 100px;
 }
 
@@ -51,10 +51,6 @@ body {
 transform: rotateY(180deg);
 }
 
-.card:hover .back {
+.reverse {
     transform: rotateY(0deg);
-}
-
-.card:hover .front {
-    transform: rotateY(-180deg);
 }
