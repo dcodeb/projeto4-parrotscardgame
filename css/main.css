@@ -17,15 +17,18 @@ body {
 }
 
 .container-cards {
-    margin: 0 122px;
+    width: 1200px;
+    margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .card {
     width: 117px;
     height: 146px;
     position:  relative;
+    margin: 0 20px 20px;
 }
 
 .card img {
@@ -36,8 +39,8 @@ body {
     width: 100%;
     height: 100%;
     background-color: #A7E9AF;
+    border: 1px solid grey;
     border-radius: 10px;
-    box-shadow: 1px 1px 1px rgba(0,0,0,.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,6 +54,18 @@ body {
 transform: rotateY(180deg);
 }
 
-.reverse {
+.card-selected > .front {
+    transform: rotateY(-180deg);
+}
+
+.card-selected > .back {
     transform: rotateY(0deg);
+}
+
+.counter-clicks {
+    font-size: 45px;
+    color: #597067;
+    position: absolute;
+    right: 30px;
+    top: 30px;
 }

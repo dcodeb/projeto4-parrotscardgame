@@ -4,22 +4,23 @@ let gameDeck = ['bobrossparrot', 'explodyparrot', 'fiestaparrot', 'metalparrot',
 
 function createCards() {
     gameDeck.sort(comparador);
-    let deckUsado = [];
-    for (let i = 0; i < (totalCards / 2); i++) {
-        deckUsado.push(gameDeck[i]);
+    let usedDeck = [];
+    let halfCards = totalCards / 2;
+    for (let i = 0; i < halfCards; i++) {
+        usedDeck.push(gameDeck[i]);
     }
 
     for (let i = 0; i < 2; i++) {
-        deckUsado.sort(comparador);
-        for (let i = 0; i < deckUsado.length; i++) {
+        usedDeck.sort(comparador);
+        for (let i = 0; i < usedDeck.length; i++) {
 
             document.querySelector('.container-cards').innerHTML += `
-            <div onclick="clickCard(this)" class="card" id="${deckUsado[i]}">
+            <div onclick="clickCard(this)" class="card" id="${usedDeck[i]}">
                 <div class="front face">
                     <img src="assets/front.png" alt="carta">
                 </div>
                 <div class="back face">
-                    <img src="assets/${deckUsado[i]}.gif">
+                    <img src="assets/${usedDeck[i]}.gif">
                 </div>
             </div>
             `;
@@ -27,6 +28,60 @@ function createCards() {
         }
     }
 }
+
+
+let countClick = 1;
+let countScoreClicks = 0;
+let selectedCard1, selectedCard2;
+
+function clickCard(element) {
+
+    if (countClick === 1) {
+        selectedCard1 = element;
+        addClickStatus(selectedCard1);
+        countClick++;
+
+
+    } else if (countClick === 2) {
+        selectedCard2 = element;
+        addClickStatus(selectedCard2);
+        countClick = 0;
+
+        if (selectedCard1.id === selectedCard2.id) {
+            countClick = 1;
+            totalCards = totalCards - 2;
+
+        } else {
+            setTimeout(function () {
+                selectedCard1.setAttribute('onclick', 'clickCard(this)');
+                selectedCard2.setAttribute('onclick', 'clickCard(this)');
+                selectedCard1.classList.remove('card-selected');
+                selectedCard2.classList.remove('card-selected');
+                countClick = 1;
+            }, 1000);
+
+        }
+
+    }
+
+    if (totalCards === 0) {
+        setTimeout(function () { alert(`Fim de jogo em ${countScoreClicks} jogadas`); }, 1000);
+    }
+}
+
+
+function addClickStatus(selectedCard) {
+    selectedCard.removeAttribute('onclick');
+    selectedCard.classList.add('card-selected');
+    countScoreClicks++;
+    document.querySelector('.counter-clicks').querySelector('span').innerHTML = countScoreClicks;
+}
+
+
+function comparador() { 
+	return Math.random() - 0.5;
+}
+
 
 function startGame() {
 
@@ -40,49 +95,6 @@ function startGame() {
     }
 
     createCards();
-}
-
-let contador = 1;
-let contadorJogadas = 0;
-let card1, card2;
-function clickCard(element) {
-
-    console.log(contador);
-
-    if (contador === 2) {
-        // comparar cartas
-        card2 = element;
-        card2.removeAttribute('onclick');
-        contador = 0;
-        element.querySelector('div .back').classList.add('reverse');
-        if (card1.id === card2.id) {
-            console.log('iguais');
-            contador = 1;
-            totalCards = totalCards - 2;
-        } else {
-            setTimeout(function () {
-                card1.setAttribute('onclick', 'clickCard(this)');
-                card2.setAttribute('onclick', 'clickCard(this)');
-                card1.querySelector('div .back').classList.remove('reverse');
-                card2.querySelector('div .back').classList.remove('reverse');
-                contador = 1;
-            }, 1000);
-        }
-    } else if (contador === 1) {
-        card1 = element;
-        card1.removeAttribute('onclick');
-        contador++;
-        element.querySelector('div .back').classList.add('reverse');
-    }
-
-    if (totalCards === 0) {
-        setTimeout(function () { alert(`Fim de jogo em ${contadorJogadas} jogadas`); }, 1000);
-    }
-    contadorJogadas++;
-}
-
-function comparador() { 
-	return Math.random() - 0.5;
 }
 
 startGame();
