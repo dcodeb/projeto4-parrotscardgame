@@ -43,6 +43,7 @@ function startGame() {
 }
 
 let contador = 1;
+let contadorJogadas = 0;
 let card1, card2;
 function clickCard(element) {
 
@@ -57,6 +58,7 @@ function clickCard(element) {
         if (card1.id === card2.id) {
             console.log('iguais');
             contador = 1;
+            totalCards = totalCards - 2;
         } else {
             setTimeout(function () {
                 card1.setAttribute('onclick', 'clickCard(this)');
@@ -73,6 +75,10 @@ function clickCard(element) {
         element.querySelector('div .back').classList.add('reverse');
     }
 
+    if (totalCards === 0) {
+        setTimeout(function () { alert(`Fim de jogo em ${contadorJogadas} jogadas`); }, 1000);
+    }
+    contadorJogadas++;
 }
 
 function comparador() { 
