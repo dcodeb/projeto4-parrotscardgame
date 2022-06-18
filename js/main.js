@@ -18,7 +18,7 @@ function createCards() {
         for (let i = 0; i < usedDeck.length; i++) {
 
             document.querySelector('.container-cards').innerHTML += `
-            <div onclick="clickCard(this)" class="animate__animated animate__jackInTheBox card" id="${usedDeck[i]}">
+            <div onclick="clickCard(this)" class="animate__animated animate__jackInTheBox card">
                 <div class="front face">
                     <img src="assets/front.png" alt="carta">
                 </div>
@@ -49,7 +49,7 @@ function clickCard(element) {
         addClickStatus(selectedCard2);
         countClick = 0;
 
-        if (selectedCard1.id === selectedCard2.id) {
+        if (selectedCard1.querySelector('.back').innerHTML === selectedCard2.querySelector('.back').innerHTML) {
             countClick = 1;
             totalCards = totalCards - 2;
 
@@ -63,7 +63,7 @@ function clickCard(element) {
     if (totalCards === 0) {
         setTimeout(function () {
             clearInterval(timerID);
-            document.querySelector('.content-end-game div h3').innerHTML = `PARABÉNS, VOCÊ USOU UM TOTAL DE <strong>${countScoreClicks}</strong> CLIQUES`;
+            document.querySelector('.content-end-game div h3').innerHTML = `PARABÉNS, VOCÊ GANHOU COM <strong>${countScoreClicks}</strong> JOGADAS`;
             document.querySelector('.content-end-game div h4').innerHTML = `SEU TEMPO TOTAL FOI DE <strong>${totalTimer}</strong>`;
             showHideEndGame(200);
         }, 700);
@@ -76,6 +76,7 @@ function clickCard(element) {
 
 
 function addClickStatus(selectedCard) {
+    document.querySelector('#sound-click').play();
     selectedCard.removeAttribute('onclick');
     selectedCard.classList.add('card-selected');
     countScoreClicks++;
@@ -157,11 +158,11 @@ function comparador() {
 
 function startGame() {
     while(true) {
-        totalCards = prompt('Olá, com quantas cartas você deseja jogar? Escolha um número par qualquer de 4 a 14');    
-        if ((totalCards % 2) == 0 && totalCards <= 14) {
+        totalCards = prompt('Olá, com quantas cartas você deseja jogar? Escolha um número par qualquer entre 4 e 14');    
+        if ((totalCards % 2) === 0 && totalCards != 2 && totalCards <= 14) {
             break;
         } else {
-            alert('Número inválido, escolha apenas números pares (2-4-6-8-10-12-14)');
+            alert('Número inválido, escolha apenas números pares com o seguinte intervalo: 4-6-8-10-12-14');
         }
     }
 
