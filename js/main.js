@@ -1,5 +1,6 @@
-let cartaClicada;
+let timerID = 0;
 let totalCards = 0;
+let totalTimer;
 let gameDeck = ['bobrossparrot', 'explodyparrot', 'fiestaparrot', 'metalparrot', 'revertitparrot', 'tripletsparrot', 'unicornparrot'];
 
 function createCards() {
@@ -10,12 +11,14 @@ function createCards() {
         usedDeck.push(gameDeck[i]);
     }
 
+    document.querySelector('.container-cards').innerHTML = '';
+
     for (let i = 0; i < 2; i++) {
         usedDeck.sort(comparador);
         for (let i = 0; i < usedDeck.length; i++) {
 
             document.querySelector('.container-cards').innerHTML += `
-            <div onclick="clickCard(this)" class="card" id="${usedDeck[i]}">
+            <div onclick="clickCard(this)" class="animate__animated animate__jackInTheBox card" id="${usedDeck[i]}">
                 <div class="front face">
                     <img src="assets/front.png" alt="carta">
                 </div>
@@ -34,8 +37,7 @@ let countClick = 1;
 let countScoreClicks = 0;
 let selectedCard1, selectedCard2;
 
-function clickCard(element) {
-
+function clickCard(element) { 
     if (countClick === 1) {
         selectedCard1 = element;
         addClickStatus(selectedCard1);
@@ -52,20 +54,23 @@ function clickCard(element) {
             totalCards = totalCards - 2;
 
         } else {
-            setTimeout(function () {
-                selectedCard1.setAttribute('onclick', 'clickCard(this)');
-                selectedCard2.setAttribute('onclick', 'clickCard(this)');
-                selectedCard1.classList.remove('card-selected');
-                selectedCard2.classList.remove('card-selected');
-                countClick = 1;
-            }, 1000);
+            removeAllClickStatus(selectedCard1, selectedCard2);
 
         }
 
     }
 
     if (totalCards === 0) {
-        setTimeout(function () { alert(`Fim de jogo em ${countScoreClicks} jogadas`); }, 1000);
+        setTimeout(function () {
+            clearInterval(timerID);
+            document.querySelector('.content-end-game div h3').innerHTML = `PARABÉNS, VOCÊ USOU UM TOTAL DE <strong>${countScoreClicks}</strong> CLIQUES`;
+            document.querySelector('.content-end-game div h4').innerHTML = `SEU TEMPO TOTAL FOI DE <strong>${totalTimer}</strong>`;
+            showHideEndGame(200);
+        }, 700);
+    }
+
+    if (countScoreClicks === 1) {
+        startTimer();
     }
 }
 
@@ -78,13 +83,79 @@ function addClickStatus(selectedCard) {
 }
 
 
-function comparador() { 
+function removeAllClickStatus(card1, card2) {
+    setTimeout(function () {
+        card1.setAttribute('onclick', 'clickCard(this)');
+        card2.setAttribute('onclick', 'clickCard(this)');
+        card1.classList.remove('card-selected');
+        card2.classList.remove('card-selected');
+        countClick = 1;
+    }, 1000);
+
+}
+
+
+function restartGame() {
+    totalCards = 0;
+    countClick = 1;
+    countScoreClicks = 0;
+    selectedCard1 = '';
+    selectedCard2 = '';
+    document.querySelector('.counter-clicks').querySelector('span').innerHTML = '0';
+    document.querySelector('.timer-game').querySelector('span').innerHTML = '00:00:00';
+    document.querySelector('.content-end-game div').classList.replace('animate__jackInTheBox', 'animate__hinge');
+
+    startGame();
+    showHideEndGame(2200);
+}
+
+
+function showHideEndGame(timeOut) {
+    setTimeout(function () {
+        document.querySelector('.content-end-game').classList.toggle('enable-content-end-game');
+        document.querySelector('.content-end-game div').classList.replace('animate__hinge', 'animate__jackInTheBox');
+    }, timeOut);
+}
+
+
+function startTimer() {
+    let minutes = 0;
+    let seconds = 0;
+    let milliseconds = 0;
+    timerID = setInterval(function() {
+        milliseconds += 10;
+
+        if (milliseconds === 1000) {
+            milliseconds = 0;
+            seconds++;
+
+            if (seconds === 60) {
+                seconds = 0;
+                minutes++;
+
+                if (minutes === 60) {
+                    minutes = 0;
+                }
+            }
+        }
+
+        let m = minutes < 10 ? '0' + minutes : minutes;
+        let s = seconds < 10 ? '0' + seconds : seconds;
+        let ms = milliseconds < 10 ? '00' + milliseconds : milliseconds < 100 ? '0' + milliseconds : milliseconds;
+        totalTimer = `${m}:${s}:${ms}`;
+
+        document.querySelector('.timer-game span').innerHTML = totalTimer;
+    }, 10);
+
+}
+
+
+function comparador() {
 	return Math.random() - 0.5;
 }
 
 
 function startGame() {
-
     while(true) {
         totalCards = prompt('Olá, com quantas cartas você deseja jogar? Escolha um número par qualquer de 4 a 14');    
         if ((totalCards % 2) == 0 && totalCards <= 14) {
